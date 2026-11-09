@@ -66,4 +66,4 @@ python3 -m http.server 8000
 },
 ```
 
-`cat` 可用的分類：`lang`、`web`、`data`、`devops`、`quality`、`ml`、`design`、`other`。
+`cat` 可用的分類：`lang`、`web`、`data`、`devops`、`quality`、`ml`、`rag`、`sec`、`design`、`other`、`project`。
