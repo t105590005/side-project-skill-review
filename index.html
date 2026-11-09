@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>技能複習筆記｜Hsiang-Yu (Tony) Tseng</title>
+  <meta name="description" content="履歷上提到的技能整理：一句話說明、核心觀念、實際使用經驗、面試常見問題與範例程式碼，方便面試前快速複習。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Interview Prep</p>
+      <h1>技能複習筆記</h1>
+      <p class="lead">履歷上每一項技能的重點整理：一句話說明、核心觀念、我在哪裡用過，以及面試常見問題。</p>
+      <div class="progress" aria-live="polite">
+        <div class="progress-bar"><span id="progress-fill"></span></div>
+        <span id="progress-text">0 / 0 已複習</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="toolbar" id="toolbar">
+    <div class="toolbar-inner">
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2a8 8 0 0 1 6.3 12.9l5.4 5.4-1.4 1.4-5.4-5.4A8 8 0 1 1 10 2zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>
+        <input id="search-input" type="search" placeholder="搜尋技能、觀念或面試題…" autocomplete="off">
+      </label>
+      <div class="chips" id="category-chips" role="tablist" aria-label="技能分類"></div>
+      <div class="toggles">
+        <label class="toggle"><input type="checkbox" id="core-only"><span>只看核心技能</span></label>
+        <label class="toggle"><input type="checkbox" id="hide-done"><span>隱藏已複習</span></label>
+        <button class="btn" id="quiz-btn" type="button">隨機抽題</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <div id="sections"></div>
+    <p class="empty" id="empty-state" hidden>找不到符合的技能，換個關鍵字試試看。</p>
+  </main>
+
+  <!-- 技能詳細內容 -->
+  <dialog class="sheet" id="detail-dialog" aria-labelledby="detail-title">
+    <div class="sheet-head">
+      <div>
+        <p class="sheet-cat" id="detail-cat"></p>
+        <h2 id="detail-title"></h2>
+      </div>
+      <button class="icon-btn" id="detail-close" type="button" aria-label="關閉">✕</button>
+    </div>
+    <div class="sheet-body" id="detail-body"></div>
+    <div class="sheet-foot">
+      <button class="btn ghost" id="prev-btn" type="button">← 上一個</button>
+      <button class="btn" id="done-btn" type="button">標記為已複習</button>
+      <button class="btn ghost" id="next-btn" type="button">下一個 →</button>
+    </div>
+  </dialog>
+
+  <!-- 隨機抽題 -->
+  <dialog class="sheet quiz" id="quiz-dialog" aria-labelledby="quiz-q">
+    <div class="sheet-head">
+      <div>
+        <p class="sheet-cat" id="quiz-skill"></p>
+        <h2 id="quiz-q"></h2>
+      </div>
+      <button class="icon-btn" id="quiz-close" type="button" aria-label="關閉">✕</button>
+    </div>
+    <div class="sheet-body">
+      <p class="quiz-hint" id="quiz-hint">先在心裡回答一次，再按「看答案」。</p>
+      <div class="quiz-answer" id="quiz-answer" hidden></div>
+    </div>
+    <div class="sheet-foot">
+      <button class="btn ghost" id="quiz-reveal" type="button">看答案</button>
+      <button class="btn" id="quiz-next" type="button">下一題</button>
+    </div>
+  </dialog>
+
+  <footer class="footer">
+    <p>Hsiang-Yu (Tony) Tseng ·
+      <a href="https://www.linkedin.com/in/hsiang-yu-tseng-tony/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/t105590005" target="_blank" rel="noopener">GitHub</a></p>
+    <p class="muted">複習進度只存在你的瀏覽器（localStorage），不會上傳。</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
