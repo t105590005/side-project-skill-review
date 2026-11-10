@@ -227,12 +227,15 @@ services:
       "Artisan CLI：產生程式碼、執行 migration 等指令。",
       "Service Container：負責依賴注入（Dependency Injection）。",
     ],
-    used: "和碩：用 Laravel 開發盤點及耗材管理系統，包括內部 RESTful API、多國語系、角色權限控管和 Excel 匯出。",
+    used: "和碩：用 Laravel 開發盤點及耗材管理系統，包括依模組拆分的 RESTful API、Sanctum 登入驗證、Policy 權限控管、排程任務（安全庫存通知信、呆滯庫存分析、匯率更新）、三種語系，以及 Excel／PDF 報表。",
     qa: [
       { q: "什麼是 N+1 問題？Laravel 怎麼解決？", a: "先查出 N 筆資料，再對每一筆各查一次關聯資料，總共變成 N+1 次查詢。用 Eager Loading 解決：例如 Material::with('category')->get()，一次把關聯資料一起查出來。" },
       { q: "Middleware 的用途？", a: "在請求進入 Controller 之前或回應送出之後執行的過濾層，例如驗證登入（auth）、檢查權限、記錄 log、處理 CORS。" },
       { q: "Migration 有什麼好處？", a: "資料表結構的變更寫成程式碼，可以進版本控制、在任何環境用指令重建或回滾，團隊成員的資料庫結構也能保持一致。" },
       { q: "Laravel 怎麼防範 CSRF？", a: "表單會帶上一個 CSRF token（Blade 裡寫 @csrf），由 VerifyCsrfToken middleware 驗證，確認請求確實來自自己的網站。" },
+      { q: "Laravel Sanctum 和傳統的 Session 驗證有什麼差別？", a: "Session 驗證把登入狀態存在伺服器端，瀏覽器靠 Cookie 帶 Session ID，適合同網域的傳統網頁。Sanctum 提供兩種方式：一是給 SPA 用的 Cookie 驗證（同樣基於 Session，但加上 CSRF 保護，適合同網域的前後端分離），二是給行動 App 或第三方用的 API Token（存在 personal_access_tokens 資料表，請求時放在 Authorization: Bearer 標頭，可以設定權限範圍 abilities 並隨時撤銷）。和 Passport 相比，Sanctum 比較輕量，不需要完整的 OAuth2。" },
+      { q: "Policy 和 Middleware 怎麼分工？", a: "Middleware 處理「路由層級」的共同檢查，在請求進入 Controller 之前執行，例如有沒有登入（auth:sanctum）、語系設定、流量限制。Policy 處理「針對某個資源或動作」的授權，例如這個使用者能不能編輯這筆入庫單，通常在 Controller 裡用 $this->authorize('update', $inbound) 或在 Blade 裡用 @can 檢查。簡單說：Middleware 判斷「能不能進來」，Policy 判斷「能不能對這筆資料做這件事」。前端隱藏按鈕只是使用者體驗，後端一定要用 Policy 再檢查一次。" },
+      { q: "Laravel 的排程任務怎麼設定？失敗了怎麼辦？", a: "設定：在 app/Console/Kernel.php 的 schedule() 裡註冊，例如 $schedule->command('stock:safe-mail')->dailyAt('08:00')；伺服器只需要一個 cron 每分鐘執行 php artisan schedule:run。常用選項：withoutOverlapping() 避免上一次還沒跑完又重複執行、onOneServer() 在多台伺服器時只跑一次、runInBackground()。失敗處理：用 onFailure() 或 emailOutputOnFailure() 通知、把輸出寫進 log（appendOutputTo）、耗時或可能失敗的工作丟進 Queue 並設定重試次數（tries）與 failed() 處理，失敗的工作會記錄在 failed_jobs 資料表，可以用 queue:retry 重新執行。另外要確保任務是冪等的，重跑也不會重複寄信或重複扣資料。" },
     ],
     code: `// routes/api.php
 Route::middleware('auth')->group(function () {
